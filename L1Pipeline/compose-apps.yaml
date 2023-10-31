@@ -1,0 +1,14 @@
+version: '3'
+services:
+  carwebapp:
+    image: carwebapp
+    ports:
+      - '3001:80'
+    restart: always
+    container_name: carwebapp
+  carbillingapp:
+    image: carbillingapp
+    ports:
+      - '3002:80'
+    restart: always
+    container_name: carbillingapp

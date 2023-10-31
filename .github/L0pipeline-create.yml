@@ -1,0 +1,55 @@
+name: L1_Deploy
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CARBILLING_IMAGE_ACR_PATH:
+      CARWEB_IMAGE_ACR_PATH:
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Azure CLI
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      
+      - name: Build the CarBillingApp image
+        working-directory: ./L1Pipeline/CarBillingApp
+        run: |
+          docker build -t $CARBILLING_IMAGE_ACR_PATH .
+
+      - name: Build the CarWebApp image
+        working-directory: ./L1Pipeline/CarWebApp
+        run: |
+          docker build -t $CARWEB_IMAGE_ACR_PATH .
+
+      - name: Login to ACR
+        run: |
+          az acr login --name $CARWEB_CONTAINER_PATH
+        env:
+          CARWEB_CONTAINER_PATH: 
+      
+      - name: Push images to ACR
+        run: |
+          docker push $CARBILLING_IMAGE_ACR_PATH
+          docker push $CARWEB_IMAGE_ACR_PATH
+
+      - name: Configure CarWebApp with a docker container
+        run:
+           az webapp config container set 
+           --docker-custom-image-name carwebcontainer.azurecr.io/carwebapp:2.0 
+           --name carwebappService 
+           --resource-group AVL-Vali-Testing 
+           --docker-registry-server-url https://carwebcontainer.azurecr.io
