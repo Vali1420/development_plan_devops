@@ -23,7 +23,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       
       - name: Build the CarBillingApp image
-        working-directory: ./L1Pipeline/CarBillingApp
+        working-directory: ./L1Pipeline/CarBillingApp/CarBillingApp
         run: |
           docker build -t ${{vars.CARBILLING_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}} .
 
