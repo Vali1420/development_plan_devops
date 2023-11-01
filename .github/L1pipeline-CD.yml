@@ -1,5 +1,4 @@
-name: L1_Deploy
-
+name: L1_CD
 on:
   workflow_dispatch:
 
