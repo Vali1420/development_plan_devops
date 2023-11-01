@@ -34,7 +34,7 @@ jobs:
 
       - name: Login to ACR
         run: |
-          az acr login --name ${{vars.$CARWEB_CONTAINER_NAME}}
+          az acr login --name ${{vars.CARWEB_CONTAINER_NAME}}
 
       - name: Push images to ACR
         run: |
