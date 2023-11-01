@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
-    .AddJsonFile("appsettings.Secrets.json")
+    //.AddJsonFile("appsettings.Secrets.json")
     .AddEnvironmentVariables()
     .Build();
 
