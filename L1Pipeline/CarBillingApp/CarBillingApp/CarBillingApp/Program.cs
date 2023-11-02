@@ -34,4 +34,14 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Migrate latest database changes during startup
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<DataContext>();
+
+    // Here is the migration executed
+    dbContext.Database.Migrate();
+}
+
 app.Run();

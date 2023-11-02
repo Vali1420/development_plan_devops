@@ -25,11 +25,18 @@ jobs:
            --name ${{vars.CARWEB_APPSERVICE_NAME}}
            --resource-group ${{secrets.RESOURCE_GROUP}}
            --docker-registry-server-url ${{vars.DOCKER_REGISTRY_CONTAINER_URL}}
+      
+      - name: Set ConnectionString CarWebApp for mysql 
+        run: 
+           az webapp config appsettings set
+          -g ${{secrets.RESOURCE_GROUP}}
+          -n ${{vars.CARWEB_APPSERVICE_NAME}}
+          --settings PostgreSql=${{CARWEB_CONNECTION_STRING_POSTGRESQL}}
           
-      - name: Configure CarBillingApp with a docker container
-        run:
-           az webapp config container set 
-           --docker-custom-image-name ${{vars.CARBILLING_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}}
-           --name ${{vars.CARBILLING_APPSERVICE_NAME}} 
-           --resource-group ${{secrets.RESOURCE_GROUP}}
-           --docker-registry-server-url ${{vars.DOCKER_REGISTRY_CONTAINER_URL}}
+      # - name: Configure CarBillingApp with a docker container
+      #   run:
+      #      az webapp config container set 
+      #      --docker-custom-image-name ${{vars.CARBILLING_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}}
+      #      --name ${{vars.CARBILLING_APPSERVICE_NAME}} 
+      #      --resource-group ${{secrets.RESOURCE_GROUP}}
+      #      --docker-registry-server-url ${{vars.DOCKER_REGISTRY_CONTAINER_URL}}
