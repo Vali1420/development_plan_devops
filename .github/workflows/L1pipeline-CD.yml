@@ -9,7 +9,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    environment: Development
     steps:
       - name: Set up Azure CLI
         uses: azure/login@v1
@@ -21,16 +21,15 @@ jobs:
       - name: Configure CarWebApp with a docker container
         run:
            az webapp config container set 
-           --docker-custom-image-name carwebcontainer.azurecr.io/carwebapp:2.0 
-           --name carwebappService 
-           --resource-group AVL-Vali-Testing 
-           --docker-registry-server-url https://carwebcontainer.azurecr.io
+           --docker-custom-image-name ${{vars.CARWEB_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}}
+           --name ${{vars.CARWEB_APPSERVICE_NAME}}
+           --resource-group ${{secrets.RESOURCE_GROUP}}
+           --docker-registry-server-url ${{vars.DOCKER_REGISTRY_CONTAINER_URL}}
           
       - name: Configure CarBillingApp with a docker container
         run:
            az webapp config container set 
-           --docker-custom-image-name carwebcontainer.azurecr.io/carwebapp:2.0 
-           --name carwebappService 
-           --resource-group AVL-Vali-Testing 
-           --docker-registry-server-url https://carwebcontainer.azurecr.io
-      
+           --docker-custom-image-name ${{vars.CARBILLING_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}}
+           --name ${{vars.CARBILLING_APPSERVICE_NAME}} 
+           --resource-group ${{secrets.RESOURCE_GROUP}}
+           --docker-registry-server-url ${{vars.DOCKER_REGISTRY_CONTAINER_URL}}
