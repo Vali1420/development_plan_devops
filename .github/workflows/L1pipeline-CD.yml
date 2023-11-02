@@ -31,7 +31,7 @@ jobs:
            az webapp config appsettings set
           -g ${{secrets.RESOURCE_GROUP}}
           -n ${{vars.CARWEB_APPSERVICE_NAME}}
-          --settings PostgreSql=${{CARWEB_CONNECTION_STRING_POSTGRESQL}}
+          --settings PostgreSql=${{secrets.CARWEB_CONNECTION_STRING_POSTGRESQL}}
           
       # - name: Configure CarBillingApp with a docker container
       #   run:
