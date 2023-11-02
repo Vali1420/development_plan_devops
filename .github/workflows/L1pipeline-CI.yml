@@ -43,35 +43,37 @@ jobs:
           docker push ${{vars.CARBILLING_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}}
           docker push ${{vars.CARWEB_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}}
 
-# jobs:
-#   production:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
+jobs:
+  prod:
+    runs-on: ubuntu-latest
+    environment: Production
+    needs: dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-#       - name: Set up Azure CLI
-#         uses: azure/login@v1
-#         with:
-#           client-id: ${{ secrets.AZURE_CLIENT_ID }}
-#           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-#           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Set up Azure CLI
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       
-#       - name: Build the CarBillingApp image
-#         working-directory: ./L1Pipeline/CarBillingApp/CarBillingApp
-#         run: |
-#           docker build -t ${{vars.CARBILLING_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}} .
+      - name: Build the CarBillingApp image
+        working-directory: ./L1Pipeline/CarBillingApp/CarBillingApp
+        run: |
+          docker build -t ${{vars.CARBILLING_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}} .
 
-#       - name: Build the CarWebApp image
-#         working-directory: ./L1Pipeline/CarWebApp
-#         run: |
-#           docker build -t ${{vars.CARWEB_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}} .
+      - name: Build the CarWebApp image
+        working-directory: ./L1Pipeline/CarWebApp
+        run: |
+          docker build -t ${{vars.CARWEB_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}} .
 
-#       - name: Login to ACR
-#         run: |
-#           az acr login --name ${{vars.CARWEB_CONTAINER_NAME}}
+      - name: Login to ACR
+        run: |
+          az acr login --name ${{vars.CARWEB_CONTAINER_NAME}}
 
-#       - name: Push images to ACR
-#         run: |
-#           docker push ${{vars.CARBILLING_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}}
-#           docker push ${{vars.CARWEB_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}}
+      - name: Push images to ACR
+        run: |
+          docker push ${{vars.CARBILLING_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}}
+          docker push ${{vars.CARWEB_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}}
