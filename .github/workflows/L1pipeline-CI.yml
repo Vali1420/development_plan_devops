@@ -42,8 +42,7 @@ jobs:
         run: |
           docker push ${{vars.CARBILLING_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}}
           docker push ${{vars.CARWEB_IMAGE_ACR_PATH}}:${{vars.IMAGE_TAG}}
-
-jobs:
+          
   prod:
     runs-on: ubuntu-latest
     environment: Production
